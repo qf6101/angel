@@ -131,7 +131,7 @@
 					</args>
 					<jvmArgs>
 						<jvmArg>-Xms1024m</jvmArg>
-						<jvmArg>-Xmx3g</jvmArg>
+						<jvmArg>-Xmx1g</jvmArg>
 						<jvmArg>-XX:PermSize=${PermGen}</jvmArg>
 						<jvmArg>-XX:MaxPermSize=${MaxPermGen}</jvmArg>
 						<jvmArg>-XX:ReservedCodeCacheSize=${CodeCacheSize}</jvmArg>
@@ -173,7 +173,7 @@
 						<include>**/*Suite.java</include>
 					</includes>
 					<reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
-					<argLine>-Xmx3g -Xss4096k -XX:MaxPermSize=${MaxPermGen} -XX:ReservedCodeCacheSize=512m</argLine>
+					<argLine>-Xmx1g -Xss4096k -XX:MaxPermSize=${MaxPermGen} -XX:ReservedCodeCacheSize=512m</argLine>
 					<failIfNoTests>false</failIfNoTests>
 					<systemPropertyVariables>
 						<buildDirectory>${project.build.directory}</buildDirectory>
@@ -197,7 +197,7 @@
 					<reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
 					<junitxml>.</junitxml>
 					<filereports>sparkOnAngel.txt</filereports>
-					<argLine>-ea -Xmx3g -XX:MaxPermSize=${MaxPermGen} -XX:ReservedCodeCacheSize=${CodeCacheSize}</argLine>
+					<argLine>-ea -Xmx1g -XX:MaxPermSize=${MaxPermGen} -XX:ReservedCodeCacheSize=${CodeCacheSize}</argLine>
 					<stderr/>
 				</configuration>
 				<executions>
