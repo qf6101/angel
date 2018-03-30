@@ -81,6 +81,7 @@
           </execution>
         </executions>
         <configuration>
+          <protocCommand>${protobuf.exec}</protocCommand>
           <includeDirectories>
             <includeDirectorie>${basedir}/../core/src/main/protobuf</includeDirectorie>
           </includeDirectories>

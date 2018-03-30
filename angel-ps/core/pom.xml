@@ -35,6 +35,9 @@
 				<groupId>com.github.igor-petruk.protobuf</groupId>
 				<artifactId>protobuf-maven-plugin</artifactId>
 				<version>0.6.3</version>
+				<configuration>
+					<protocCommand>${protobuf.exec}</protocCommand>
+				</configuration>
 				<executions>
 					<execution>
 						<phase>generate-sources</phase>
