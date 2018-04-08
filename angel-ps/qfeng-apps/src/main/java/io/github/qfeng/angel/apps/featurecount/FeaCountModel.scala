@@ -12,7 +12,7 @@ import org.apache.hadoop.conf.Configuration
 class FeaCountModel(conf: Configuration, _ctx: TaskContext = null) extends MLModel(conf, _ctx){
   val N: Int = conf.getInt(MLConf.ML_FEATURE_NUM, MLConf.DEFAULT_ML_FEATURE_NUM)
 
-  val feaCounter = PSModel("feature_counts", 1, N).setRowType(RowType.T_INT_SPARSE).setAverage(true)
+  val feaCounter = PSModel("feature_counts", 1, N).setRowType(RowType.T_INT_SPARSE)
   addPSModel(feaCounter)
 
   setSavePath(conf)

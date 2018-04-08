@@ -52,18 +52,17 @@ class FeaCountTask(val ctx: TaskContext) extends TrainTask[LongWritable, Text](c
   override
   def train(ctx: TaskContext): Unit = {
     val model = new FeaCountModel(conf, ctx)
-    val countVec = new SparseIntVector(feaNum)
 
     taskDataBlock.resetReadIndex()
     for (i <- 0 until taskDataBlock.size) {
       val data = taskDataBlock.read()
       val x = data.getX.asInstanceOf[SparseDoubleSortedVector]
-      val xCount = new SparseIntVector(x.size(), x.getIndices, x.values.map(_=>1))
-      countVec.plusBy(xCount)
+      val countVec = new SparseIntVector(x.size(), x.getIndices, x.values.map(_=>1))
+      countVec.setRowId(0)
+      model.feaCounter.increment(countVec)
+      model.feaCounter.syncClock()
     }
 
-    countVec.setRowId(0)
-    model.feaCounter.increment(countVec)
-    model.feaCounter.syncClock()
+    ctx.incEpoch()
   }
 }
