@@ -532,7 +532,8 @@ public abstract class AngelClient implements AngelClientInterface {
     StringBuilder sb = new StringBuilder("{");
     int size = metrics.size();
     for(int i = 0; i < size; i++) {
-      sb.append("\""+ metrics.get(i).getKey() + "\":" + metrics.get(i).getValue());
+      sb.append("\""+ metrics.get(i).getKey() + "\":" + df.format(Double.valueOf(metrics.get(i)
+          .getValue())));
       if(i < size - 1) {
         sb.append(",");
       }
