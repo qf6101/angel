@@ -49,7 +49,7 @@ public class FeaCountLocal {
     conf.setInt(AngelConf.ANGEL_PS_NUMBER, 1);
 
     //set sgd LR algorithm parameters #feature #epoch
-    conf.set(MLConf.ML_FEATURE_NUM(), String.valueOf(featureNum));
+    conf.set(MLConf.ML_FEATURE_INDEX_RANGE(), String.valueOf(featureNum));
   }
 
   public void execute() throws Exception {

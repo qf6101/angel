@@ -32,8 +32,8 @@ import org.apache.hadoop.io.{LongWritable, Text}
   */
 class FeaCountTask(val ctx: TaskContext) extends TrainTask[LongWritable, Text](ctx) {
   val LOG: Log = LogFactory.getLog(classOf[FeaCountTask])
-  val feaNum: Int = conf.getInt(ML_FEATURE_NUM, DEFAULT_ML_FEATURE_NUM)
-  val dataParser = new VWDataParser(feaNum)
+  val feaNum: Int = conf.getInt(ML_FEATURE_INDEX_RANGE, DEFAULT_ML_FEATURE_INDEX_RANGE)
+  val vwDataParser = new VWDataParser(feaNum)
 
 
   /**
@@ -41,7 +41,7 @@ class FeaCountTask(val ctx: TaskContext) extends TrainTask[LongWritable, Text](c
     */
   override
   def parse(key: LongWritable, value: Text): LabeledData = {
-    dataParser.parse(value.toString)
+    vwDataParser.parse(value.toString)
   }
 
   /**
