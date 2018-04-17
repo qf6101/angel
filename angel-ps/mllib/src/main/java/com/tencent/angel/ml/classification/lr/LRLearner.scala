@@ -200,6 +200,10 @@ class LRLearner(override val ctx: TaskContext) extends MLLearner(ctx) {
         s"trueRecall=${validMetric._4} " +
         s"falseRecall=${validMetric._5}")
       globalMetrics.metric(MLConf.VALID_LOSS, validMetric._1)
+      globalMetrics.metric("precision", validMetric._2)
+      globalMetrics.metric("auc", validMetric._3)
+      globalMetrics.metric("trueRecall", validMetric._4)
+      globalMetrics.metric("falseRecall", validMetric._5)
     }
   }
 
