@@ -151,6 +151,10 @@ class LRLearner(override val ctx: TaskContext) extends MLLearner(ctx) {
 
     globalMetrics.addMetric(MLConf.TRAIN_LOSS, LossMetric(trainData.size))
     globalMetrics.addMetric(MLConf.VALID_LOSS, LossMetric(validationData.size))
+    globalMetrics.addMetric("precision", LossMetric(validationData.size))
+    globalMetrics.addMetric("auc", LossMetric(validationData.size))
+    globalMetrics.addMetric("trueRecall", LossMetric(validationData.size))
+    globalMetrics.addMetric("falseRecall", LossMetric(validationData.size))
 
     while (ctx.getEpoch < epochNum) {
       val epoch = ctx.getEpoch
