@@ -100,10 +100,10 @@ class LDAModel(conf: Configuration, _ctx: TaskContext = null) extends MLModel(co
   val beta = conf.getFloat(BETA, 0.01F)
   val vBeta = beta * V
 
-  val threadNum = conf.getInt(ML_WORKER_THREAD_NUM, DEFAULT_ML_WORKER_THREAD_NUM)
+  val threadNum = conf.getInt(ANGEL_WORKER_THREAD_NUM, DEFAULT_ANGEL_WORKER_THREAD_NUM)
   val splitNum = conf.getInt(SPLIT_NUM, 1)
   val psNum = conf.getInt(ANGEL_PS_NUMBER, 1)
-  val parts = conf.getInt(ML_PART_PER_SERVER, DEFAULT_ML_PART_PER_SERVER)
+  val parts = conf.getInt(ML_MODEL_PART_PER_SERVER, DEFAULT_ML_MODEL_PART_PER_SERVER)
 
   val saveDocTopic = conf.getBoolean(SAVE_DOC_TOPIC, false)
   val saveWordTopic = conf.getBoolean(SAVE_WORD_TOPIC, true)
@@ -123,8 +123,8 @@ class LDAModel(conf: Configuration, _ctx: TaskContext = null) extends MLModel(co
   addPSModel(wtMat)
   addPSModel(tMat)
 
-//  setSavePath(conf)
-//  setLoadPath(conf)
+  //  setSavePath(conf)
+  //  setLoadPath(conf)
 
   override
   def predict(dataSet: DataBlock[LabeledData]): DataBlock[PredictResult] = {
@@ -144,7 +144,7 @@ class LDAModel(conf: Configuration, _ctx: TaskContext = null) extends MLModel(co
     for (i <- 0 until paths.length) {
       val path = paths(i)
       LOG.info(s"Load model from path ${path}")
-      val fs   = path.getFileSystem(conf)
+      val fs = path.getFileSystem(conf)
 
       val in = new BufferedReader(new InputStreamReader(fs.open(path)))
 
@@ -174,9 +174,9 @@ class LDAModel(conf: Configuration, _ctx: TaskContext = null) extends MLModel(co
 
   def getPaths(): Array[Path] = {
     val taskId = ctx.getTaskIndex
-    val total  = ctx.getTotalTaskNum
-    val dir    = conf.get(AngelConf.ANGEL_LOAD_MODEL_PATH)
-    val base   = dir + "/" + "word_topic"
+    val total = ctx.getTotalTaskNum
+    val dir = conf.get(AngelConf.ANGEL_LOAD_MODEL_PATH)
+    val base = dir + "/" + "word_topic"
 
     val basePath = new Path(base)
     val fs = basePath.getFileSystem(conf)

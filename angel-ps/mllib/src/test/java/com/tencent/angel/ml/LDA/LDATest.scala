@@ -51,6 +51,7 @@ class LDATest {
 
     // Use local deploy mode
     conf.set(AngelConf.ANGEL_DEPLOY_MODE, "LOCAL")
+    conf.setInt(AngelConf.ANGEL_PSAGENT_CACHE_SYNC_TIMEINTERVAL_MS, 100)
 
     // Set input and output path
     conf.setBoolean(AngelConf.ANGEL_JOB_OUTPUT_PATH_DELETEONEXIST, true)
@@ -74,7 +75,7 @@ class LDATest {
 
     conf.setInt(WORD_NUM, V)
     conf.setInt(TOPIC_NUM, K)
-    conf.setInt(MLConf.ML_WORKER_THREAD_NUM, 1)
+    conf.setInt(MLConf.ANGEL_WORKER_THREAD_NUM, 1)
     conf.setInt(MLConf.ML_EPOCH_NUM, 10)
     conf.setBoolean(SAVE_DOC_TOPIC, false)
     conf.setBoolean(SAVE_WORD_TOPIC, true)
