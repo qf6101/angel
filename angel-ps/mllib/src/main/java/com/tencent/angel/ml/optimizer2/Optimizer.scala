@@ -166,7 +166,7 @@ abstract class Optimizer(var batchSize: Int, val numUpdatePerEpoch: Int, var lr:
     LOG.info(s"The nonZeroNumber ratio is $sparsity")
 
     LOG.info(s"The pull, calculate, push time is this epoch are $pull, $calulate and $push respectively !")
-    (localParams, loss)
+    (OptUtils.clone(globalParams), loss)
   }
 
   protected def updateLocal(model: OptModel, numSample: Int, iterCount: Int): Unit
