@@ -166,6 +166,8 @@ abstract class Optimizer(var batchSize: Int, val numUpdatePerEpoch: Int, var lr:
     LOG.info(s"The nonZeroNumber ratio is $sparsity")
 
     LOG.info(s"The pull, calculate, push time is this epoch are $pull, $calulate and $push respectively !")
+    if (globalParams != null && !globalParams.isEmpty)
+      LOG.info("3 global bias: " + model.asInstanceOf[LRModel].getBias(globalParams.get("lr_intercept")) + ", weight0: " + globalParams.get("lr_weight").asInstanceOf[DenseDoubleVector].get(0))
     (OptUtils.clone(globalParams), loss)
   }
 
