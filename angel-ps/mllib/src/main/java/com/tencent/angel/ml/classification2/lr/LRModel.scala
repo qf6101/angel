@@ -137,10 +137,6 @@ class LRModel(conf: Configuration, _ctx: TaskContext = null) extends OptModel(co
 
     val fxValue = wVector.dot(x) + bias
 
-    if (fxValue.isNaN || fxValue.isInfinity || fxValue > 1000) {
-      LOG.info("fxValue is abnormal: " + fxValue + ", with coefficients: " + wVector.toString + ", bias :" + bias)
-    }
-
     1.0 / (1.0 + Math.exp(-fxValue)) -> LogisticLoss(fxValue, y)
   }
 

@@ -17,17 +17,12 @@
 
 package com.tencent.angel.ml.optimizer2.lossfuncs
 
-import com.tencent.angel.ml.objective.Loss.LogisticLoss
-import org.apache.commons.logging.{Log, LogFactory}
-
 object LogisticLoss {
-  val LOG: Log = LogFactory.getLog(classOf[LogisticLoss])
-  private val threshold = Math.log(Double.MaxValue) / 2.0
+  private val threshold = Math.log(Double.MaxValue)
 
   def apply(ymodel: Double, yture: Double): Double = {
     val temp = -yture * ymodel
     if (temp > threshold) {
-      LOG.info("Margin exceeds threshold: (" + yture + ", " + ymodel + ", " + threshold + ")")
       temp
     } else {
       Math.log1p(Math.exp(-yture * ymodel))
