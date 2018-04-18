@@ -23,7 +23,8 @@ import com.tencent.angel.exception.AngelException
 import com.tencent.angel.ml.MLLearner
 import com.tencent.angel.ml.conf.MLConf
 import com.tencent.angel.ml.feature.LabeledData
-import com.tencent.angel.ml.math.TUpdate
+import com.tencent.angel.ml.math.vector.DenseDoubleVector
+import com.tencent.angel.ml.math.{TUpdate, TVector}
 import com.tencent.angel.ml.metric.LossMetric
 import com.tencent.angel.ml.model.MLModel
 import com.tencent.angel.ml.optimizer2.{OptMethods, Optimizer}
@@ -97,6 +98,8 @@ class LRLearner(override val ctx: TaskContext) extends MLLearner(ctx) {
     optimizer.epoch = epoch
     // (util.HashMap[String, TUpdate], Double)
     val result = optimizer.optimize(trainData, lrModel, indexes)
+
+    LOG.info("Optimization loss: " + result._2 + ", bias: " + lrModel.getBias(result._1) + ", weight0: " + result._1.get("lr_weight").asInstanceOf[DenseDoubleVector].get(0))
 
     result._1
   }

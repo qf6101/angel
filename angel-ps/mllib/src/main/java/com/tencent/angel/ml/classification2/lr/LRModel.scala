@@ -140,7 +140,7 @@ class LRModel(conf: Configuration, _ctx: TaskContext = null) extends OptModel(co
     1.0 / (1.0 + Math.exp(-fxValue)) -> LogisticLoss(fxValue, y)
   }
 
-  private def getBias(bias: Any): Double = {
+  def getBias(bias: Any): Double = {
     bias.asInstanceOf[TVector].getType match {
       case RowType.T_DOUBLE_SPARSE =>
         bias.asInstanceOf[SparseDoubleVector].get(0)
