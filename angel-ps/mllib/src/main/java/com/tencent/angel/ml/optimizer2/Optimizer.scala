@@ -19,6 +19,7 @@ package com.tencent.angel.ml.optimizer2
 
 import java.util
 
+import com.tencent.angel.ml.classification2.lr.LRModel
 import com.tencent.angel.ml.feature.LabeledData
 import com.tencent.angel.ml.math.TUpdate
 import com.tencent.angel.ml.math.matrix._
@@ -50,6 +51,7 @@ abstract class Optimizer(var batchSize: Int, val numUpdatePerEpoch: Int, var lr:
     startpull = System.currentTimeMillis()
     // 1. pull parameters from PS as globalParams
     globalParams = model.pullParamsFromPS(indexes, model.getIndexFlag)
+    LOG.info("1 global bias: " + model.asInstanceOf[LRModel].getBias(globalParams.get("lr_intercept")) + ", weight0: " + globalParams.get("lr_weight").asInstanceOf[DenseDoubleVector].get(0))
     stoppull = System.currentTimeMillis()
     pull += stoppull - startpull
 
@@ -64,9 +66,11 @@ abstract class Optimizer(var batchSize: Int, val numUpdatePerEpoch: Int, var lr:
 
     // 2.2 initial other parameters
     initialLocal(model, localParams, globalParams)
+    LOG.info("1.1 local bias: " + model.asInstanceOf[LRModel].getBias(localParams.get("lr_intercept")) + ", weight0: " + localParams.get("lr_weight").asInstanceOf[DenseDoubleVector].get(0))
 
     // 2.3 initial localParams by clone globalParams
     localParams = OptUtils.clone(globalParams)
+    LOG.info("1.2 local bias: " + model.asInstanceOf[LRModel].getBias(localParams.get("lr_intercept")) + ", weight0: " + localParams.get("lr_weight").asInstanceOf[DenseDoubleVector].get(0))
 
     // 3. training (Note: just train one ecpch)
     var (loss, lastLogFlag) = (0.0, -1)
@@ -133,6 +137,7 @@ abstract class Optimizer(var batchSize: Int, val numUpdatePerEpoch: Int, var lr:
         // d) pull new parameters form PS
         startpull = System.currentTimeMillis()
         globalParams = model.pullParamsFromPS(indexes, model.getIndexFlag)
+        LOG.info("2 global bias: " + model.asInstanceOf[LRModel].getBias(globalParams.get("lr_intercept")) + ", weight0: " + globalParams.get("lr_weight").asInstanceOf[DenseDoubleVector].get(0))
         stoppull = System.currentTimeMillis()
         pull += stoppull - startpull
 
@@ -140,10 +145,12 @@ abstract class Optimizer(var batchSize: Int, val numUpdatePerEpoch: Int, var lr:
         // e) clear gradient and monment, because a new generation begins
         //    we are not necessary clear grad here, since it has cleared
         initialLocal(model, localParams, globalParams)
+        LOG.info("2.1 local bias: " + model.asInstanceOf[LRModel].getBias(localParams.get("lr_intercept")) + ", weight0: " + localParams.get("lr_weight").asInstanceOf[DenseDoubleVector].get(0))
 
         // f) clone the newly pushed parameter as local parameters
         //    and from now on, we only operate local parameters
         localParams = OptUtils.clone(globalParams)
+        LOG.info("2.2 local bias: " + model.asInstanceOf[LRModel].getBias(localParams.get("lr_intercept")) + ", weight0: " + localParams.get("lr_weight").asInstanceOf[DenseDoubleVector].get(0))
 
         pullpushFlag = false
       }
