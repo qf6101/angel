@@ -77,7 +77,7 @@ class LRModel(conf: Configuration, _ctx: TaskContext = null) extends OptModel(co
 
     if (ctx.getTaskId.getIndex == 0) {
       LOG.info(s"${ctx.getTaskId} is in charge of intial model, start ...")
-      val vStddev = 0.0001
+      val vStddev = 0.000000001
       initBiasModel(biasParams)
       LOG.info(s"bias initial finished!")
 
