@@ -58,11 +58,11 @@ class LRLearner(override val ctx: TaskContext) extends MLLearner(ctx) {
   val lrModel = new LRModel(conf, ctx)
 
   val l1Reg: Map[String, Double] = if (reg1 != 0.0) {
-    Map[String, Double]("lr_weight" -> reg1, "lr_intercept" -> 0.0)
+    Map[String, Double]("lr_weight" -> reg1, "lr_intercept" -> reg1)
   } else null
 
   val l2Reg: Map[String, Double] = if (reg2 != 0.0) {
-    Map[String, Double]("lr_weight" -> reg2, "lr_intercept" -> 0.0)
+    Map[String, Double]("lr_weight" -> reg2, "lr_intercept" -> reg2)
   } else null
 
   val optimizer: Optimizer = optMethod match {
