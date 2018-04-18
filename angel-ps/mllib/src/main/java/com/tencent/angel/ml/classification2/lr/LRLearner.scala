@@ -99,7 +99,7 @@ class LRLearner(override val ctx: TaskContext) extends MLLearner(ctx) {
     // (util.HashMap[String, TUpdate], Double)
     val result = optimizer.optimize(trainData, lrModel, indexes)
 
-    LOG.info("Optimization loss: " + result._2 + ", bias: " + lrModel.getBias(result._1) + ", weight0: " + result._1.get("lr_weight").asInstanceOf[DenseDoubleVector].get(0))
+    LOG.info("Optimization loss: " + result._2 + ", bias: " + lrModel.getBias(result._1.get("lr_intercept")) + ", weight0: " + result._1.get("lr_weight").asInstanceOf[DenseDoubleVector].get(0))
 
     result._1
   }
