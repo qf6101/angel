@@ -78,9 +78,15 @@ class LRTrainTask(val ctx: TaskContext) extends TrainTask[LongWritable, Text](ct
   override def parse(key: LongWritable, value: Text): LabeledData = {
     val result = dataParser.parse(value.toString)
     val x = result.getX.asInstanceOf[SparseDoubleSortedVector]
-    x.set(208962, 0.0)
-    x.set(436249, 0.0)
-    result.setX(x)
+    val f_idx = x.getIndices
+    val f_val = x.getValues
+
+    val (filtered_idx, filtered_val) = (f_idx zip f_val).filter { case (k, v) =>
+      if (k == 208962 || k == 436249) false else true
+    }.unzip
+
+    val xx = new SparseDoubleSortedVector(x.getDimension, filtered_idx, filtered_val)
+    result.setX(xx)
 
     if (result.getY == -1.0) LOG.info("minus label: " + result.getY + "indices: " + x.getIndices + "values: " + x.getValues)
 
