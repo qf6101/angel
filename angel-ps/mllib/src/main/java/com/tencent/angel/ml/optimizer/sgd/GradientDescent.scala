@@ -91,16 +91,9 @@ object GradientDescent {
         val y = data.getY
         val pre = w.dot(x) + b.getOrElse(0.0)
         val gradScalar = -loss.grad(pre, y) // not negative gradient
-
-        if (y == -1.0) {
-          grad.plusBy(x, gradScalar)
-          batchLoss += loss.loss(pre, y)
-          gradScalarSum += gradScalar // the grad of interception
-        } else {
-          grad.plusBy(x, gradScalar * 0.07)
-          batchLoss += loss.loss(pre, y) * 0.07
-          gradScalarSum += gradScalar * 0.07 // the grad of interception
-        }
+        grad.plusBy(x, gradScalar)
+        batchLoss += loss.loss(pre, y)
+        gradScalarSum += gradScalar // the grad of interception
       }
 
       grad.timesBy(1.0 / batchSize)

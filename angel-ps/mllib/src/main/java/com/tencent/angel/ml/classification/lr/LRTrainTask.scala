@@ -77,21 +77,7 @@ class LRTrainTask(val ctx: TaskContext) extends TrainTask[LongWritable, Text](ct
   }
 
   override def parse(key: LongWritable, value: Text): LabeledData = {
-    val result = dataParser.parse(value.toString)
-    val x = result.getX.asInstanceOf[SparseDoubleSortedVector]
-    val f_idx = x.getIndices
-    val f_val = x.getValues
-
-    val (filtered_idx, filtered_val) = (f_idx zip f_val).filter { case (k, v) =>
-      if (k == 208962 || k == 436249) false else true
-    }.unzip
-
-    val xx = new SparseDoubleSortedVector(x.getDimension, filtered_idx, filtered_val)
-    result.setX(xx)
-
-//    LOG.info("Parsed label: " + result.getY + "index0 " + xx.getIndices.toList(0) + "value0: " + xx.getValues.toList(0))
-
-    result
+    dataParser.parse(value.toString)
   }
 
   override def preProcess(taskContext: TaskContext) {
