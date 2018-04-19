@@ -33,6 +33,7 @@ import org.apache.hadoop.io.{LongWritable, Text}
 
 import scala.math.Numeric
 import scala.reflect.runtime.universe._
+import collection.JavaConversions._
 
 
 /**
@@ -88,7 +89,7 @@ class LRTrainTask(val ctx: TaskContext) extends TrainTask[LongWritable, Text](ct
     val xx = new SparseDoubleSortedVector(x.getDimension, filtered_idx, filtered_val)
     result.setX(xx)
 
-    if (result.getY == -1.0) LOG.info("minus label: " + result.getY + "indices: " + x.getIndices + "values: " + x.getValues)
+    LOG.info("Parsed label: " + result.getY + "index0 " + xx.getIndices.toList(0) + "value0: " + xx.getValues.toList(0))
 
     result
   }
