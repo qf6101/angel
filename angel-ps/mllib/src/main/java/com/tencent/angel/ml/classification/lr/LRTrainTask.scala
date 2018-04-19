@@ -89,7 +89,7 @@ class LRTrainTask(val ctx: TaskContext) extends TrainTask[LongWritable, Text](ct
     val xx = new SparseDoubleSortedVector(x.getDimension, filtered_idx, filtered_val)
     result.setX(xx)
 
-    LOG.info("Parsed label: " + result.getY + "index0 " + xx.getIndices.toList(0) + "value0: " + xx.getValues.toList(0))
+//    LOG.info("Parsed label: " + result.getY + "index0 " + xx.getIndices.toList(0) + "value0: " + xx.getValues.toList(0))
 
     result
   }
