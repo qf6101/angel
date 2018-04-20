@@ -125,7 +125,7 @@ class LRLearner(override val ctx: TaskContext) extends MLLearner(ctx) {
     LOG.info(s"Task[${ctx.getTaskIndex}]: epoch=$epoch mini-batch update success." +
       s"Cost $batchCost ms. " +
       s"Batch loss = $loss")
-    localWeight, lr
+    (localWeight, lr)
   }
 
   /**
