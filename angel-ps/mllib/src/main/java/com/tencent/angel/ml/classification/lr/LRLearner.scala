@@ -78,7 +78,7 @@ class LRLearner(override val ctx: TaskContext) extends MLLearner(ctx) {
                                           trainData: DataBlock[LabeledData],
                                           batchSize: Int,
                                           indexes: Array[N],
-                                          ctx: TaskContext): TDoubleVector = {
+                                          ctx: TaskContext): (TDoubleVector, Double) = {
     val LLoss: Loss = regLL
 
     // Decay learning rate.
@@ -125,7 +125,7 @@ class LRLearner(override val ctx: TaskContext) extends MLLearner(ctx) {
     LOG.info(s"Task[${ctx.getTaskIndex}]: epoch=$epoch mini-batch update success." +
       s"Cost $batchCost ms. " +
       s"Batch loss = $loss")
-    localWeight
+    localWeight, lr
   }
 
   /**
@@ -153,17 +153,18 @@ class LRLearner(override val ctx: TaskContext) extends MLLearner(ctx) {
     globalMetrics.addMetric(MLConf.VALID_LOSS, LossMetric(validationData.size))
     globalMetrics.addMetric(MLConf.TRAIN_AUC, LossMetric(1))
     globalMetrics.addMetric(MLConf.VALID_AUC, LossMetric(1))
+    globalMetrics.addMetric(MLConf.TRAIN_LR, LossMetric(1))
 
     while (ctx.getEpoch < epochNum) {
       val epoch = ctx.getEpoch
       LOG.info(s"Task[${ctx.getTaskIndex}]: epoch=$epoch start.")
 
       val startTrain = System.currentTimeMillis()
-      val localWeight = trainOneEpoch(epoch, trainData, samplePerBatch, indexes, ctx)
+      val (localWeight, lr) = trainOneEpoch(epoch, trainData, samplePerBatch, indexes, ctx)
       val trainCost = System.currentTimeMillis() - startTrain
 
       val startValid = System.currentTimeMillis()
-      validate(epoch, localWeight, trainData, validationData)
+      validate(epoch, localWeight, trainData, validationData, lr)
       val validCost = System.currentTimeMillis() - startValid
 
       LOG.info(s"Task[${ctx.getTaskIndex}]: epoch=$epoch success. " +
@@ -183,7 +184,7 @@ class LRLearner(override val ctx: TaskContext) extends MLLearner(ctx) {
     * @param epoch    : epoch id
     * @param valiData : validata data storage
     */
-  def validate(epoch: Int, weight: TDoubleVector, trainData: DataBlock[LabeledData], valiData: DataBlock[LabeledData]) = {
+  def validate(epoch: Int, weight: TDoubleVector, trainData: DataBlock[LabeledData], valiData: DataBlock[LabeledData], lr:Double) = {
     val trainMetrics = ValidationUtils.calMetrics(trainData, weight, regLL)
     LOG.info(s"Task[${ctx.getTaskIndex}]: epoch = $epoch " +
       s"trainData loss = ${trainMetrics._1 / trainData.size()} " +
@@ -193,6 +194,7 @@ class LRLearner(override val ctx: TaskContext) extends MLLearner(ctx) {
       s"falseRecall = ${trainMetrics._5}")
     globalMetrics.metric(MLConf.TRAIN_LOSS, trainMetrics._1)
     globalMetrics.metric(MLConf.TRAIN_AUC, trainMetrics._3)
+    globalMetrics.metric(MLConf.TRAIN_LR, lr)
 
     if (valiData.size > 0) {
       val validMetric = ValidationUtils.calMetrics(valiData, weight, regLL)
