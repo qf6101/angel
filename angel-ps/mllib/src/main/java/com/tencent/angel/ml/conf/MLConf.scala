@@ -203,6 +203,8 @@ object MLConf {
   /** The loss sum of all samples */
   val TRAIN_LOSS = "train.loss"
   val VALID_LOSS = "validate.loss"
+  val TRAIN_AUC = "train.auc"
+  val VALID_AUC = "validate.auc"
   val LOG_LIKELIHOOD = "log.likelihood"
 
   /** The predict error of all samples */
