@@ -113,6 +113,7 @@ object GradientDescent {
         wM.syncClock()
 
         val threshold = loss.getRegParam * lr
+        LOG.info("Outer threshold: " + threshold + ", reg: " + loss.getRegParam + ", lr: " + lr)
         if (ctx.getTaskId.getIndex == 0) {
           val softThrFun: UpdateFunc = new SoftThreshold(wM.getMatrixId(), 0, threshold)
           // update wModel

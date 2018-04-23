@@ -26,6 +26,8 @@ import it.unimi.dsi.fastutil.ints.Int2FloatOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2DoubleMap;
 import it.unimi.dsi.fastutil.longs.Long2DoubleOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
@@ -35,6 +37,7 @@ import java.nio.FloatBuffer;
  * That is `toId` = `fromId` + `value`
  */
 public class SoftThreshold extends MMUpdateFunc {
+  private Log LOG = LogFactory.getLog(SoftThreshold.class);
 
   public SoftThreshold(int matrixId, int rowId, double threshold) {
     super(matrixId, new int[]{rowId}, new double[]{threshold});
@@ -60,6 +63,8 @@ public class SoftThreshold extends MMUpdateFunc {
         } else {
           data.put(i, 0.0);
         }
+
+        LOG.info("value: " + value + ", threshold: " + threshold);
       }
     } finally {
       rows[0].getLock().writeLock().unlock();
