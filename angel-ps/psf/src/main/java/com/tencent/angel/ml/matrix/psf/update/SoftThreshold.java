@@ -54,22 +54,15 @@ public class SoftThreshold extends MMUpdateFunc {
       DoubleBuffer data = rows[0].getData();
       double threshold = thresholds[0];
       int size = rows[0].size();
-      int flag = -1;
       for (int i = 0; i < size; i++) {
         double value = data.get(i);
         if (value > threshold) {
-          flag = 1;
           data.put(i, value - threshold);
         } else if (value < - threshold ) {
-          flag = 2;
           data.put(i, value + threshold);
         } else {
-          flag = 3;
           data.put(i, 0.0);
-//          LOG.info("Put data: " + i + ", " + data.get(i));
         }
-
-        LOG.info("value: " + value + ", threshold: " + threshold + ", falg: " + flag);
       }
     } finally {
       rows[0].getLock().writeLock().unlock();
