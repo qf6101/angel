@@ -66,6 +66,7 @@ public class SoftThreshold extends MMUpdateFunc {
         } else {
           flag = 3;
           data.put(i, 0.0);
+          LOG.info("Put data: " + i + ", " + data.get(i));
         }
 
         LOG.info("value: " + value + ", threshold: " + threshold + ", falg: " + flag);
